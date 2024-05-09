@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/questie-back:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/questie-backend:latest
