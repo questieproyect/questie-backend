@@ -5,13 +5,15 @@ import {
   IsPositive,
   IsUUID,
   IsOptional,
-  Length,
+  IsEnum,
+  MaxLength,
 } from 'class-validator';
+import { PolymorphicEntityType } from '../entities/product.entity';
 
 export class CreateProductDto {
   @IsNotEmpty()
   @IsString()
-  @Length(1, 50)
+  @MaxLength(50)
   name: string;
 
   @IsNotEmpty()
@@ -27,11 +29,24 @@ export class CreateProductDto {
   @IsString()
   currency: string;
 
+  @IsString()
+  @IsOptional()
+  imgUrl: string;
+
+  @IsOptional()
+  @IsNumber()
+  order: number;
+
+  @IsOptional()
+  @IsString()
+  data: JSON;
+
   @IsUUID()
   @IsOptional()
   polymorphicEntityId: string;
 
   @IsString()
+  @IsEnum(PolymorphicEntityType)
   @IsOptional()
   polymorphicEntityType: string;
 }

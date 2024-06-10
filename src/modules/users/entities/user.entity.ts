@@ -1,5 +1,3 @@
-import { Lesson } from 'src/modules/lessons/entities/lesson.entity';
-import { Stats } from 'src/modules/stats/entities/stats.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,10 +7,13 @@ import {
   DeleteDateColumn,
   OneToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
   Unique,
+  OneToMany,
 } from 'typeorm';
+import { Assessment } from 'src/modules/assessment/entities/assessment.entity';
+import { Enrolment } from 'src/modules/enrolments/entities/enrolment.entity';
+import { Stats } from 'src/modules/stats/entities/stats.entity';
+import { Progress } from 'src/modules/progress/entities/progress.entity';
 
 @Entity()
 @Unique(['username', 'email'])
@@ -32,6 +33,15 @@ export class User {
   @Column({ default: 'https://placehold.co/200x200' })
   profile_pic: string;
 
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
+  birthdate?: Date;
+
   @Column({
     type: 'enum',
     enum: ['admin', 'user'],
@@ -39,13 +49,18 @@ export class User {
   })
   role: string;
 
-  @OneToOne(() => Stats, (stats) => stats.user_id)
+  @OneToMany(() => Assessment, (assessment) => assessment.user)
+  assessment: Assessment[];
+
+  @OneToOne(() => Stats, (stats) => stats.user)
   @JoinColumn({ name: 'stats_id' })
   stats: Stats;
 
-  @ManyToMany(() => Lesson)
-  @JoinTable({ name: 'progress' })
-  lessons: Lesson[];
+  @OneToMany(() => Enrolment, (enrolment) => enrolment.user)
+  enrolments: Enrolment[];
+
+  @OneToMany(() => Progress, (progress) => progress.user)
+  progresses: Progress[];
 
   @CreateDateColumn()
   created_at: Date;

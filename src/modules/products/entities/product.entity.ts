@@ -7,6 +7,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum PolymorphicEntityType {
+  Course = 'Course',
+  Module = 'Module',
+  Lesson = 'Lesson',
+  Content = 'Content',
+}
+
 @Entity({ name: 'products' })
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -24,10 +31,19 @@ export class Product {
   @Column()
   currency: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ default: 'https://placehold.co/600x400.png' })
+  imgUrl: string;
+
+  @Column({ nullable: true })
+  order: number;
+
+  @Column({ type: 'json', nullable: true })
+  data: JSON;
+
+  @Column({ enum: PolymorphicEntityType, nullable: true })
   polymorphicEntityType: string;
 
-  @Column({ type: 'uuid', nullable: true, default: null })
+  @Column({ type: 'uuid', nullable: true, default: null, unique: true })
   polymorphicEntityId: string;
 
   @CreateDateColumn()

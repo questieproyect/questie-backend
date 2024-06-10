@@ -5,31 +5,25 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  OneToOne,
   JoinColumn,
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
 @Entity()
 export class Invoice {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: string = uuid();
 
-  @Column()
-  user_id: string;
-
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   total: number;
-
-  @Column()
-  product_id: string;
 
   @Column()
   status: string;
 
-  @OneToOne(() => Product)
+  @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
   product: Product;
 
